@@ -1,0 +1,439 @@
+{
+  "openapi" : "3.0.2",
+  "info" : {
+    "version" : "v2024.4",
+    "title" : "MailFlow SendPro API",
+    "description" : "MailFlow SendPro API"
+  },
+  "security" : [ {
+    "OAuth2" : [ "api" ]
+  } ],
+  "servers" : [ {
+    "description" : "SendPro Mailflow API",
+    "url" : "https://{basePath}/{accountId}",
+    "variables" : {
+      "basePath" : {
+        "default" : "api.flowmailer.net"
+      },
+      "accountId" : {
+        "default" : "123456"
+      }
+    }
+  } ],
+  "externalDocs" : {
+    "description" : "https://flowmailer.com/apidoc",
+    "url" : "https://flowmailer.com/apidoc"
+  },
+  "components" : {
+    "securitySchemes" : {
+      "OAuth2" : {
+        "description" : "To get an access token, send a POST request to the tokenUrl with the following parameters:\n- client_id: Your client ID\n- client_secret: Your client secret\n- grant_type: client_credentials\n",
+        "type" : "oauth2",
+        "flows" : {
+          "clientCredentials" : {
+            "tokenUrl" : "https://login.flowmailer.net/oauth/token",
+            "scopes" : {
+              "api" : "Access API scope"
+            }
+          }
+        }
+      }
+    },
+    "schemas" : {
+      "KeyValuePair" : {
+        "type" : "object",
+        "properties" : {
+          "key" : {
+            "type" : "string"
+          },
+          "value" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "key", "value" ]
+      },
+      "Attachment" : {
+        "type" : "object",
+        "properties" : {
+          "content" : {
+            "type" : "string",
+            "description" : "Base64 encoded content",
+            "format" : "byte"
+          },
+          "contentId" : {
+            "type" : "string",
+            "description" : "Content-ID header (required for disposition related)",
+            "example" : "<part1.DE1D8F7E.E51807FF@flowmailer.com>"
+          },
+          "contentType" : {
+            "type" : "string",
+            "description" : "Content-Type header",
+            "example" : "image/png"
+          },
+          "disposition" : {
+            "type" : "string",
+            "description" : "Content-Disposition header for the attachment. Special value related should be used for images referenced in the HTML.",
+            "enum" : [ "attachment", "inline", "related" ],
+            "example" : "inline"
+          },
+          "filename" : {
+            "type" : "string",
+            "description" : "Filename of the attachment"
+          }
+        },
+        "required" : [ "content", "filename", "disposition", "contentType" ]
+      },
+      "SimulateMessage" : {
+        "type" : "object",
+        "properties" : {
+          "attachments" : {
+            "type" : "array",
+            "description" : "Attachments. Only applicable when messageType = EMAIL",
+            "items" : {
+              "$ref" : "#/components/schemas/Attachment"
+            }
+          },
+          "flowSelector" : {
+            "type" : "string",
+            "description" : "Freely configurable value that can be used to select a flow or one of its variants."
+          },
+          "deliveryNotificationType" : {
+            "type" : "string",
+            "description" : "Defaults to NONE for SMS. Only applicable when messageType = SMS",
+            "enum" : [ "NONE", "FAILURE", "DELIVERY_AND_FAILURE" ]
+          },
+          "messageType" : {
+            "type" : "string",
+            "enum" : [ "EMAIL", "SMS", "LETTER" ],
+            "default" : "EMAIL"
+          },
+          "senderAddress" : {
+            "type" : "string",
+            "description" : "Sender email address or phone number. For email messages this cannot contain a display name."
+          },
+          "recipientAddress" : {
+            "type" : "string",
+            "description" : "Recipient email address or phone number. For email messages this cannot contain a display name."
+          },
+          "headerFromAddress" : {
+            "type" : "string",
+            "description" : "From header address. Only applicable when messageType = EMAIL"
+          },
+          "headerFromName" : {
+            "type" : "string",
+            "description" : "From header name. Only applicable when messageType = EMAIL"
+          },
+          "headerToAddress" : {
+            "type" : "string",
+            "description" : "To header address. Only applicable when messageType = EMAIL"
+          },
+          "headerToName" : {
+            "type" : "string",
+            "description" : "To header name. Only applicable when messageType = EMAIL"
+          },
+          "subject" : {
+            "type" : "string",
+            "description" : "Email subject"
+          },
+          "mimedata" : {
+            "type" : "string",
+            "description" : "Complete email MIME message with headers. Only applicable when messageType = EMAIL",
+            "format" : "byte"
+          },
+          "data" : {
+            "type" : "array",
+            "description" : "Extra data that will be available in templates",
+            "items" : {
+              "$ref" : "#/components/schemas/KeyValuePair"
+            }
+          },
+          "tags" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "sourceId" : {
+            "type" : "string"
+          },
+          "scheduleAt" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "headers" : {
+            "type" : "array",
+            "description" : "Extra headers that will be used",
+            "items" : {
+              "$ref" : "#/components/schemas/KeyValuePair"
+            }
+          },
+          "text" : {
+            "type" : "string",
+            "description" : "Text content"
+          },
+          "html" : {
+            "type" : "string",
+            "description" : "Email HTML content. Only applicable when messageType = EMAIL"
+          }
+        },
+        "required" : [ "flowSelector", "messageType", "senderAddress", "recipientAddress", "sourceId" ]
+      },
+      "SubmitMessage" : {
+        "type" : "object",
+        "properties" : {
+          "attachments" : {
+            "type" : "array",
+            "description" : "Attachments. Only applicable when messageType = EMAIL",
+            "items" : {
+              "$ref" : "#/components/schemas/Attachment"
+            }
+          },
+          "flowSelector" : {
+            "type" : "string",
+            "description" : "Freely configurable value that can be used to select a flow or one of its variants."
+          },
+          "deliveryNotificationType" : {
+            "type" : "string",
+            "description" : "Defaults to NONE for SMS. Only applicable when messageType = SMS",
+            "enum" : [ "NONE", "FAILURE", "DELIVERY_AND_FAILURE" ]
+          },
+          "messageType" : {
+            "type" : "string",
+            "enum" : [ "EMAIL", "SMS", "LETTER" ],
+            "default" : "EMAIL"
+          },
+          "senderAddress" : {
+            "type" : "string",
+            "description" : "Sender email address or phone number. For email messages this cannot contain a display name."
+          },
+          "recipientAddress" : {
+            "type" : "string",
+            "description" : "Recipient email address or phone number. For email messages this cannot contain a display name."
+          },
+          "headerFromAddress" : {
+            "type" : "string",
+            "description" : "From header address. Only applicable when messageType = EMAIL"
+          },
+          "headerFromName" : {
+            "type" : "string",
+            "description" : "From header name. Only applicable when messageType = EMAIL"
+          },
+          "headerToAddress" : {
+            "type" : "string",
+            "description" : "To header address. Only applicable when messageType = EMAIL"
+          },
+          "headerToName" : {
+            "type" : "string",
+            "description" : "To header name. Only applicable when messageType = EMAIL"
+          },
+          "subject" : {
+            "type" : "string",
+            "description" : "Email subject"
+          },
+          "mimedata" : {
+            "type" : "string",
+            "description" : "Complete email MIME message with headers. Only applicable when messageType = EMAIL",
+            "format" : "byte"
+          },
+          "data" : {
+            "type" : "array",
+            "description" : "Extra data that will be available in templates",
+            "items" : {
+              "$ref" : "#/components/schemas/KeyValuePair"
+            }
+          },
+          "tags" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "scheduleAt" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "headers" : {
+            "type" : "array",
+            "description" : "Extra headers that will be used",
+            "items" : {
+              "$ref" : "#/components/schemas/KeyValuePair"
+            }
+          },
+          "text" : {
+            "type" : "string",
+            "description" : "Text content"
+          },
+          "html" : {
+            "type" : "string",
+            "description" : "Email HTML content. Only applicable when messageType = EMAIL"
+          }
+        },
+        "required" : [ "flowSelector", "messageType", "senderAddress", "recipientAddress" ]
+      }
+    },
+    "responses" : {
+      "FlowResponse" : {
+        "description" : "List flows per account",
+        "content" : {
+          "application/vnd.flowmailer.v1.12+json" : {
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "type" : "object",
+                "properties" : {
+                  "description" : {
+                    "type" : "string",
+                    "description" : "Flow description"
+                  },
+                  "id" : {
+                    "type" : "string",
+                    "description" : "Flow ID"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "SourceResponse" : {
+        "description" : "Information about a source system, A source system can submit messages to flowmailer.",
+        "content" : {
+          "application/vnd.flowmailer.v1.12+json" : {
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "type" : "object",
+                "properties" : {
+                  "description" : {
+                    "type" : "string",
+                    "description" : "Source description"
+                  },
+                  "id" : {
+                    "type" : "string",
+                    "description" : "Source ID"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "FlowmailerResponseOK" : {
+        "description" : "A standard Flowmailer API response",
+        "content" : {
+          "application/vnd.flowmailer.v1.12+json" : {
+            "schema" : {
+              "type" : "object"
+            }
+          }
+        }
+      },
+      "FlowMailerLocationResponse" : {
+        "description" : "Used to indicate that the response contains a Location header with the URL of the newly created API resource",
+        "headers" : {
+          "Location" : {
+            "description" : "The URL of the newly created API resource",
+            "schema" : {
+              "type" : "string"
+            }
+          }
+        },
+        "content" : {
+          "application/vnd.flowmailer.v1.12+json" : {
+            "schema" : {
+              "type" : "object"
+            }
+          }
+        }
+      }
+    }
+  },
+  "paths" : {
+    "/flows" : {
+      "get" : {
+        "summary" : "List flows per account",
+        "parameters" : [ {
+          "name" : "statistics",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "boolean",
+            "default" : true
+          },
+          "description" : "Whether to return message statistics or not"
+        } ],
+        "responses" : {
+          "200" : {
+            "$ref" : "#/components/responses/FlowResponse"
+          }
+        }
+      }
+    },
+    "/sources" : {
+      "get" : {
+        "summary" : "List source systems per account",
+        "parameters" : [ {
+          "name" : "statistics",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "boolean",
+            "default" : true
+          },
+          "description" : "Whether to include message statistics or not"
+        } ],
+        "responses" : {
+          "200" : {
+            "$ref" : "#/components/responses/SourceResponse"
+          }
+        }
+      }
+    },
+    "/messages/simulate" : {
+      "post" : {
+        "summary" : "Simulate an email or sms message",
+        "requestBody" : {
+          "required" : true,
+          "content" : {
+            "application/vnd.flowmailer.v1.12+json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/SimulateMessage"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "$ref" : "#/components/responses/FlowmailerResponseOK"
+          },
+          "201" : {
+            "$ref" : "#/components/responses/FlowMailerLocationResponse"
+          }
+        }
+      }
+    },
+    "/messages/submit" : {
+      "post" : {
+        "summary" : "Send an email or sms message",
+        "requestBody" : {
+          "required" : true,
+          "content" : {
+            "application/vnd.flowmailer.v1.12+json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/SubmitMessage"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "$ref" : "#/components/responses/FlowmailerResponseOK"
+          },
+          "201" : {
+            "$ref" : "#/components/responses/FlowMailerLocationResponse"
+          }
+        }
+      }
+    }
+  }
+}
