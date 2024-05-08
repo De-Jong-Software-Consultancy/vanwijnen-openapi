@@ -395,6 +395,46 @@
         }
       }
     },
+    "/messages;daterange={dateRange}" : {
+      "get" : {
+        "summary" : "List messages by dateRange",
+        "parameters" : [ {
+          "name" : "dateRange",
+          "description" : "The date range of the message",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "example" : "2014-12-16T05:50:00Z,2014-12-16T06:00:00Z"
+          }
+        } ],
+        "responses" : {
+          "206" : {
+            "description" : "The details of the message",
+            "headers" : {
+              "Content-Range" : {
+                "required" : true,
+                "description" : "used to specify which subset of the requested data is returned",
+                "schema" : {
+                  "type" : "string",
+                  "example" : "items 0-10/22 or items 0-10/>10000"
+                }
+              }
+            },
+            "content" : {
+              "application/vnd.flowmailer.v1.12+json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/MessageResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/messages/{messageId}" : {
       "get" : {
         "summary" : "Retrieve message information",
