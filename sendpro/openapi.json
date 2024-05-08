@@ -318,16 +318,6 @@
           }
         }
       },
-      "FlowmailerResponseOK" : {
-        "description" : "A standard Flowmailer API response",
-        "content" : {
-          "application/vnd.flowmailer.v1.12+json" : {
-            "schema" : {
-              "type" : "object"
-            }
-          }
-        }
-      },
       "FlowMailerLocationResponse" : {
         "description" : "Used to indicate that the response contains a Location header with the URL of the newly created API resource",
         "headers" : {
@@ -403,11 +393,24 @@
           }
         },
         "responses" : {
-          "200" : {
-            "$ref" : "#/components/responses/FlowmailerResponseOK"
-          },
           "201" : {
-            "$ref" : "#/components/responses/FlowMailerLocationResponse"
+            "description" : "A standard Flowmailer API response",
+            "headers" : {
+              "location" : {
+                "description" : "The URL of the newly created API resource",
+                "schema" : {
+                  "type" : "string",
+                  "example" : "https://connectors.ipaas.vanwijnen.nl/flowmailer-front/1234/messages/102405072043171549b710388e60a1b5"
+                }
+              }
+            },
+            "content" : {
+              "application/vnd.flowmailer.v1.12+json" : {
+                "schema" : {
+                  "type" : "object"
+                }
+              }
+            }
           }
         }
       }
@@ -426,11 +429,24 @@
           }
         },
         "responses" : {
-          "200" : {
-            "$ref" : "#/components/responses/FlowmailerResponseOK"
-          },
           "201" : {
-            "$ref" : "#/components/responses/FlowMailerLocationResponse"
+            "description" : "A standard Flowmailer API response",
+            "headers" : {
+              "location" : {
+                "description" : "The URL of the newly created API resource",
+                "schema" : {
+                  "type" : "string",
+                  "example" : "https://connectors.ipaas.vanwijnen.nl/flowmailer-front/1234/messages/102405072043171549b710388e60a1b5"
+                }
+              }
+            },
+            "content" : {
+              "application/vnd.flowmailer.v1.12+json" : {
+                "schema" : {
+                  "type" : "object"
+                }
+              }
+            }
           }
         }
       }
