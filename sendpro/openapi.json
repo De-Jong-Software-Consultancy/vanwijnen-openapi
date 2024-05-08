@@ -430,10 +430,10 @@
         },
         "responses" : {
           "201" : {
-            "description" : "A standard Flowmailer API response",
+            "description" : "A standard Flowmailer API response, last part of the location url is the message ID which can be used to retrieve the message and its status.",
             "headers" : {
               "location" : {
-                "description" : "The URL of the newly created API resource",
+                "description" : "The URL of the newly created API resource.",
                 "schema" : {
                   "type" : "string",
                   "example" : "https://connectors.ipaas.vanwijnen.nl/flowmailer-front/1234/messages/102405072043171549b710388e60a1b5"
