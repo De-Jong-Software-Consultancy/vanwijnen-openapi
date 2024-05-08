@@ -83,6 +83,19 @@
         },
         "required" : [ "content", "filename", "disposition", "contentType" ]
       },
+      "Message" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "description" : "Message id"
+          },
+          "status" : {
+            "type" : "string",
+            "description" : "Current message status"
+          }
+        }
+      },
       "SimulateMessage" : {
         "type" : "object",
         "properties" : {
@@ -375,6 +388,33 @@
         "responses" : {
           "200" : {
             "$ref" : "#/components/responses/SourceResponse"
+          }
+        }
+      }
+    },
+    "/messages/{messageId}" : {
+      "get" : {
+        "summary" : "Retrieve message information",
+        "parameters" : [ {
+          "name" : "messageId",
+          "description" : "The message identifier returned from the last part of the location header when submitting a new message.",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "example" : "102405072043171549b710388e60a1b5"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "The details of the message",
+            "content" : {
+              "application/vnd.flowmailer.v1.12+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Message"
+                }
+              }
+            }
           }
         }
       }
