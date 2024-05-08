@@ -96,7 +96,8 @@
             "description" : "Current message status",
             "example" : "ERROR"
           }
-        }
+        },
+        "required" : [ "id", "status" ]
       },
       "SimulateMessage" : {
         "type" : "object",
