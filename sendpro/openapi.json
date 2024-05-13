@@ -40,18 +40,6 @@
       }
     },
     "schemas" : {
-      "KeyValuePair" : {
-        "type" : "object",
-        "properties" : {
-          "key" : {
-            "type" : "string"
-          },
-          "value" : {
-            "type" : "string"
-          }
-        },
-        "required" : [ "key", "value" ]
-      },
       "Attachment" : {
         "type" : "object",
         "properties" : {
@@ -157,11 +145,8 @@
             "format" : "byte"
           },
           "data" : {
-            "type" : "array",
-            "description" : "Extra data that will be available in templates",
-            "items" : {
-              "$ref" : "#/components/schemas/KeyValuePair"
-            }
+            "type" : "object",
+            "description" : "Extra data that will be available in templates"
           },
           "tags" : {
             "type" : "array",
@@ -177,11 +162,8 @@
             "format" : "date-time"
           },
           "headers" : {
-            "type" : "array",
-            "description" : "Extra headers that will be used",
-            "items" : {
-              "$ref" : "#/components/schemas/KeyValuePair"
-            }
+            "type" : "object",
+            "description" : "Extra headers that will be used"
           },
           "text" : {
             "type" : "string",
@@ -252,11 +234,8 @@
             "format" : "byte"
           },
           "data" : {
-            "type" : "array",
-            "description" : "Extra data that will be available in templates",
-            "items" : {
-              "$ref" : "#/components/schemas/KeyValuePair"
-            }
+            "type" : "object",
+            "description" : "Extra data that will be available in templates"
           },
           "tags" : {
             "type" : "array",
@@ -269,11 +248,8 @@
             "format" : "date-time"
           },
           "headers" : {
-            "type" : "array",
-            "description" : "Extra headers that will be used",
-            "items" : {
-              "$ref" : "#/components/schemas/KeyValuePair"
-            }
+            "type" : "object",
+            "description" : "Extra headers that will be used"
           },
           "text" : {
             "type" : "string",
