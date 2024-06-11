@@ -239,6 +239,9 @@
           },
           "tags" : {
             "type" : "array",
+            "example" : [ "ipaas:i099_update_user_data" ],
+            "default" : [ "ipaas:undefined" ],
+            "description" : "Specify the source",
             "items" : {
               "type" : "string"
             }
@@ -260,7 +263,7 @@
             "description" : "Email HTML content. Only applicable when messageType = EMAIL"
           }
         },
-        "required" : [ "flowSelector", "messageType", "senderAddress", "recipientAddress" ]
+        "required" : [ "flowSelector", "messageType", "senderAddress", "recipientAddress", "tags" ]
       }
     },
     "responses" : {
